@@ -1,0 +1,23 @@
+# Pengaturan Backend
+backend:
+  name: git-gateway # Ini nanti dipakai kalau sudah online di Netlify
+  branch: main 
+
+local_backend: true # Ini WAJIB dinyalakan saat kita ngoding di lokal
+
+# Pengaturan Penyimpanan Gambar
+media_folder: "static/images/berita"
+public_folder: "/images/berita"
+
+# Pengaturan Konten (Koleksi)
+collections:
+  - name: "berita"
+    label: "Berita Kegiatan"
+    folder: "content/english/blog" # Sesuaikan dengan struktur Hugoplate
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Judul Kegiatan", name: "title", widget: "string"}
+      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Foto Dokumentasi", name: "image", widget: "image", required: false}
+      - {label: "Isi Laporan", name: "body", widget: "markdown"}
