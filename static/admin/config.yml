@@ -12,6 +12,10 @@ publish_mode: editorial_workflow
 media_folder: "static/images/berita"
 public_folder: "/images/berita"
 
+# 4. Lokal CMS 
+#edit konten lewat antarmuka CMS tanpa harus push ke internet
+local_backend: true
+
 # 4. Definisi Koleksi Konten
 collections:
   - name: "berita"
