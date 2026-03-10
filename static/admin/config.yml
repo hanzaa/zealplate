@@ -1,23 +1,42 @@
-# Pengaturan Backend
+# Pengaturan Backend & Penghubung ke GitHub
 backend:
-  name: git-gateway # Ini nanti dipakai kalau sudah online di Netlify
-  branch: main 
+  name: git-gateway
+  branch: main
 
-local_backend: true # Ini WAJIB dinyalakan saat kita ngoding di lokal
+# Aktifkan ini HANYA jika sedang mengedit secara lokal (npx decap-server)
+# local_backend: true
 
-# Pengaturan Penyimpanan Gambar
+# Pengaturan Folder Gambar
 media_folder: "static/images/berita"
 public_folder: "/images/berita"
 
-# Pengaturan Konten (Koleksi)
+# Struktur Laporan & Formulir
 collections:
   - name: "berita"
     label: "Berita Kegiatan"
-    folder: "content/english/blog" # Sesuaikan dengan struktur Hugoplate
+    folder: "content/english/blog" # Lokasi simpan file Markdown
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Judul Kegiatan", name: "title", widget: "string"}
-      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Tanggal Pelaksanaan", name: "date", widget: "datetime"}
+      - {label: "Penulis / Pelapor", name: "author", widget: "string", default: "Admin"}
+      
+      - label: "Kategori Kegiatan"
+        name: "categories"
+        widget: "select"
+        multiple: true
+        options: ["Laporan Operasional", "Pengumuman", "Siaran Pers", "Keamanan Siber", "Umum"]
+        default: ["Umum"]
+
+      - label: "Klasifikasi Keamanan Dokumen"
+        name: "tags"
+        widget: "select"
+        multiple: true
+        options: ["Sangat Rahasia", "Rahasia", "Terbatas", "Biasa", "Publik"]
+        default: ["Biasa"]
+        
       - {label: "Foto Dokumentasi", name: "image", widget: "image", required: false}
-      - {label: "Isi Laporan", name: "body", widget: "markdown"}
+      - {label: "Ringkasan Eksekutif", name: "description", widget: "text", required: false, hint: "Tuliskan 1-2 kalimat kesimpulan laporan"}
+      - {label: "Isi Laporan Lengkap", name: "body", widget: "markdown"}
+      - {label: "Simpan sebagai Draf?", name: "draft", widget: "boolean", default: false, hint: "Aktifkan jika laporan belum siap dipublikasikan"}
