@@ -1,27 +1,31 @@
-# Pengaturan Backend & Penghubung ke GitHub
+# 1. Pengaturan Backend & Keamanan
 backend:
   name: git-gateway
-  branch: main
+  branch: main # Pastikan ini sesuai dengan branch utama di GitHub kamu
 
-# Aktifkan ini HANYA jika sedang mengedit secara lokal (npx decap-server)
-# local_backend: true
+# 2. Fitur Editorial Workflow (PENTING untuk Review Konten)
+# Ini memungkinkan status "Draft", "In Review", dan "Ready" di CMS
+publish_mode: editorial_workflow
 
-# Pengaturan Folder Gambar
+# 3. Pengaturan Media
+# Saya sarankan struktur folder yang rapi agar tidak tercampur
 media_folder: "static/images/berita"
 public_folder: "/images/berita"
 
-# Struktur Laporan & Formulir
+# 4. Definisi Koleksi Konten
 collections:
   - name: "berita"
-    label: "Berita Kegiatan"
-    folder: "content/english/blog" # Lokasi simpan file Markdown
+    label: "Berita & Laporan Kegiatan"
+    folder: "content/english/blog"
     create: true
+    # Menggunakan slug yang SEO-friendly
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Judul Kegiatan", name: "title", widget: "string"}
-      - {label: "Tanggal Pelaksanaan", name: "date", widget: "datetime"}
-      - {label: "Penulis / Pelapor", name: "author", widget: "string", default: "Admin"}
+      - {label: "Tanggal Pelaksanaan", name: "date", widget: "datetime", format: "YYYY-MM-DD HH:mm:ss"}
+      - {label: "Penulis / Pelapor", name: "author", widget: "string", default: "Admin Zeal"}
       
+      # Kategori: Menggunakan widget select yang lebih fleksibel
       - label: "Kategori Kegiatan"
         name: "categories"
         widget: "select"
@@ -29,14 +33,21 @@ collections:
         options: ["Laporan Operasional", "Pengumuman", "Siaran Pers", "Keamanan Siber", "Umum"]
         default: ["Umum"]
 
-      - label: "Klasifikasi Keamanan Dokumen"
+      # Klasifikasi Keamanan: Sangat krusial untuk standar pemerintahan
+      - label: "Klasifikasi Keamanan"
         name: "tags"
         widget: "select"
-        multiple: true
+        multiple: false # Biasanya dokumen hanya punya satu status klasifikasi utama
         options: ["Sangat Rahasia", "Rahasia", "Terbatas", "Biasa", "Publik"]
-        default: ["Biasa"]
+        default: "Biasa"
         
       - {label: "Foto Dokumentasi", name: "image", widget: "image", required: false}
-      - {label: "Ringkasan Eksekutif", name: "description", widget: "text", required: false, hint: "Tuliskan 1-2 kalimat kesimpulan laporan"}
+      
+      # Ringkasan Eksekutif (Meta Description untuk SEO)
+      - {label: "Ringkasan Eksekutif", name: "description", widget: "text", required: true, hint: "Wajib diisi untuk tampilan cuplikan di halaman depan."}
+      
+      # Isi Laporan
       - {label: "Isi Laporan Lengkap", name: "body", widget: "markdown"}
-      - {label: "Simpan sebagai Draf?", name: "draft", widget: "boolean", default: false, hint: "Aktifkan jika laporan belum siap dipublikasikan"}
+
+      # Draft: Kita tetap pertahankan sebagai parameter Hugo
+      - {label: "Publikasikan Langsung?", name: "draft", widget: "boolean", default: false, hint: "Jika 'True', halaman tidak akan muncul di website meski sudah di-publish di CMS."}
